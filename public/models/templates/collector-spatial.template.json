@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "bundleId": "dream-fair-wheel-core",
+  "assets": [
+    {
+      "id": "base-showcase-custom",
+      "role": "base",
+      "anchors": {
+        "frame_mount": [0, 0.85, -1.02],
+        "support_left": [-1.3, 0.14, -1.02],
+        "support_right": [1.3, 0.14, -1.02],
+        "backdrop_mount": [0, 0.85, -2.18]
+      },
+      "proxies": [
+        {
+          "id": "base-body",
+          "type": "box",
+          "size": [4.1, 0.92, 3.46],
+          "offset": [0, 0.3, 0]
+        }
+      ],
+      "clearance": {
+        "top": 0.18,
+        "back": 0.08,
+        "side": 0.1
+      },
+      "solveAxes": [],
+      "metrics": {
+        "topY": 0.85,
+        "supportSpanHalf": 1.3
+      }
+    },
+    {
+      "id": "frame-classic-custom",
+      "role": "frame",
+      "anchors": {
+        "center": [0, 0, 0]
+      },
+      "proxies": [
+        {
+          "id": "frame-ring",
+          "type": "sphere",
+          "radius": 2.29,
+          "offset": [0, 0, 0]
+        }
+      ],
+      "clearance": {
+        "bottom": 0.28,
+        "back": 0.2,
+        "side": 0.14
+      },
+      "solveAxes": ["y", "z"],
+      "metrics": {
+        "outerRadius": 2.29,
+        "depth": 0.12,
+        "supportDrop": 1.02
+      }
+    },
+    {
+      "id": "backdrop-showcase-custom",
+      "role": "backdrop",
+      "anchors": {
+        "center": [0, 0, 0]
+      },
+      "proxies": [
+        {
+          "id": "backdrop-panel",
+          "type": "box",
+          "size": [5.6, 5.2, 0.12],
+          "offset": [0, 0, 0]
+        }
+      ],
+      "clearance": {
+        "top": 0.42,
+        "bottom": 0.4,
+        "front": 1.18,
+        "side": 0.44
+      },
+      "solveAxes": ["z"],
+      "metrics": {
+        "thickness": 0.12,
+        "width": 5.6
+      }
+    },
+    {
+      "id": "character-human-core",
+      "role": "character",
+      "anchors": {
+        "root": [0, 0, 0],
+        "head": [0, 1.66, 0],
+        "left_hand": [0.82, 0.78, 0.44]
+      },
+      "proxies": [
+        {
+          "id": "character-body",
+          "type": "box",
+          "size": [1.48, 2.96, 1.42],
+          "offset": [0, 1.5, 0.18]
+        },
+        {
+          "id": "character-head",
+          "type": "sphere",
+          "radius": 1.12,
+          "offset": [0, 1.72, 0]
+        }
+      ],
+      "clearance": {
+        "top": 0.08,
+        "bottom": 0.08,
+        "front": 0.06,
+        "back": 0.06,
+        "side": 0.06
+      },
+      "solveAxes": ["x", "y"],
+      "metrics": {
+        "visualHeight": 3.5
+      }
+    }
+  ]
+}

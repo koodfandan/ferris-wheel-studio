@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.npm-cache/
+
+# local env
+.env.local
+
+# build caches
+*.tsbuildinfo
+
+# local QA / probes
+tmp_*/
+tmp_*.py
+tmp_*.ps1
+_qa_*/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
