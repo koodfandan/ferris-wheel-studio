@@ -37,6 +37,9 @@ type Props = {
 
 const MODEL_BASE_SCALE = 0.74;
 const ORBIT_TARGET_Y = 0.8;
+const FIGURE_TARGET_HEIGHT = 2.68;
+const FIGURE_AUTO_FIT_MIN = 0.78;
+const FIGURE_AUTO_FIT_MAX = 1.2;
 const _tmpVec = new Vector3();
 
 const LazyStagePostFx = lazy(async () => {
@@ -133,7 +136,9 @@ export function CharacterStageV2({
               <AmbientSparkles effect={theme.effect} aura={theme.aura} glow={finish.glow} accent={finish.accent} />
               <ThemeFx effect={theme.effect} aura={theme.aura} glow={finish.glow} accent={finish.accent} />
               <SculptedFigure characterId={character.id} recipeKey={recipeKey}>
-                <FigureDisplayV2 character={character} recipe={recipe} finish={finish} detailLevel={detailLevel} />
+                <AutoFitFigure characterId={character.id} recipeKey={recipeKey}>
+                  <FigureDisplayV2 character={character} recipe={recipe} finish={finish} detailLevel={detailLevel} />
+                </AutoFitFigure>
               </SculptedFigure>
             </group>
           </ShowcaseRig>
@@ -280,6 +285,67 @@ function SculptedFigure({
       mesh.geometry = geometry;
     });
   }, [characterId, recipeKey]);
+
+  return <group ref={rootRef}>{children}</group>;
+}
+
+function AutoFitFigure({
+  characterId,
+  recipeKey,
+  children,
+}: {
+  characterId: string;
+  recipeKey: string;
+  children: ReactNode;
+}) {
+  const rootRef = useRef<Group>(null);
+  const measureBox = useMemo(() => new Box3(), []);
+  const measureSize = useMemo(() => new Vector3(), []);
+  const currentScaleRef = useRef(1);
+  const targetScaleRef = useRef(1);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    currentScaleRef.current = 1;
+    targetScaleRef.current = 1;
+    root.scale.setScalar(1);
+
+    let rafA = 0;
+    let rafB = 0;
+
+    const measure = () => {
+      if (!rootRef.current) return;
+      measureBox.setFromObject(rootRef.current);
+      if (measureBox.isEmpty()) return;
+      measureBox.getSize(measureSize);
+      const height = Math.max(0.001, measureSize.y);
+      targetScaleRef.current = MathUtils.clamp(
+        FIGURE_TARGET_HEIGHT / height,
+        FIGURE_AUTO_FIT_MIN,
+        FIGURE_AUTO_FIT_MAX,
+      );
+    };
+
+    // Wait for one frame so sculpt/part updates are already applied, then measure twice for stability.
+    rafA = window.requestAnimationFrame(() => {
+      measure();
+      rafB = window.requestAnimationFrame(measure);
+    });
+
+    return () => {
+      if (rafA) window.cancelAnimationFrame(rafA);
+      if (rafB) window.cancelAnimationFrame(rafB);
+    };
+  }, [characterId, recipeKey, measureBox, measureSize]);
+
+  useFrame((_state, delta) => {
+    if (!rootRef.current) return;
+    const next = MathUtils.damp(currentScaleRef.current, targetScaleRef.current, 10, delta);
+    currentScaleRef.current = next;
+    rootRef.current.scale.setScalar(next);
+  });
 
   return <group ref={rootRef}>{children}</group>;
 }
