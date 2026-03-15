@@ -7,12 +7,17 @@ dist/
 
 # build caches
 *.tsbuildinfo
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
 # local QA / probes
 tmp_*/
 tmp_*.py
 tmp_*.ps1
 _qa_*/
+*.log
 
 # OS / editor
 .DS_Store
