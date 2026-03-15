@@ -1,4 +1,4 @@
-# Ferris Wheel Studio
+# Blindbox Studio
 
 一个以盲盒/手办创作为核心的 3D 前端项目，支持角色展示、组合改造、舞台展示与动画交互。
 
